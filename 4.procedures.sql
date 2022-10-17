@@ -78,26 +78,74 @@ call procedure_adicionaAluno(1, 'Felipe Fernandes', '2006-09-09', 'M');
 Delimiter $$
 create procedure procedure_alteraAluno(in id int, idT int, nome varchar(25), nascimento date, genero char(1))
 begin
+    declare cont int default 0;
 	declare msg varchar(500);
-		if id >= 0 and idT >= 0 and nome between 5 and 25 and length(nascimento) = 6 and (genero = 'M' or genero = 'F' or genero = 'N') then
-			set cont = 0;
             repita: loop
 				set cont = cont + 1;
-				if cont > max(alunos.idAluno) then
+				if cont > (select max(idAluno) from alunos) then
 					leave repita;
 				end if;
-				if id = alunos.idAluno then
-					update alunos set alunos.idTurma = idT;
-					update alunos set alunos.nomeAluno = nome;
-					update alunos set alunos.nascimentoAluno = nascimento;
-					update alunos set alunos.generoAluno = genero;
+                if cont = id then
+					update alunos set alunos.idTurma = idT where alunos.idAluno = cont;
+					update alunos set alunos.nomeAluno = nome where alunos.idAluno = cont;
+					update alunos set alunos.nascimentoAluno = nascimento where alunos.idAluno = cont;
+					update alunos set alunos.generoAluno = genero where alunos.idAluno = cont;
                     set msg = 'Aluno atualizado com sucesso!';
 				end if;
 			end loop;
-		end if;
-    select msg;
+SELECT msg;
 end $$
 Delimiter ;
 drop procedure procedure_alteraAluno;
 
-call procedure_alteraAluno(1, 1, 'Felipe Fernandes', '2006-09-09', 'M');
+call procedure_alteraAluno(4, 1, 'Felipe Fernandes', '2006-09-09', 'M');
+
+#PROCEDURE 5 ALTERAR TURMA USANDO 
+Delimiter $$
+create procedure procedure_alteraTurma(in id int, nome char(2), idE int)
+begin
+    declare cont int default 0;
+	declare msg varchar(500);
+            repita: loop
+				set cont = cont + 1;
+				if cont > (select max(idTurma) from turmas) then
+					leave repita;
+				end if;
+                if cont = id then
+					update turmas set turmas.nomeTurma = nome where turmas.idTurma = cont;
+					update turmas set turmas.idEscola = idE where turmas.idTurma = cont;
+					set msg = 'Turma atualizada com sucesso!';
+				end if;
+			end loop;
+SELECT msg;
+end $$
+Delimiter ;
+drop procedure procedure_alteraTurma;
+
+call procedure_alteraTurma(4, '3C', 1);
+select * from turmas;
+
+#PROCEDURE 6 ALTERAR ESCOLA 
+Delimiter $$
+create procedure procedure_alteraEscola(in id int, escola varchar(25), estado char(2), cidade varchar(25))
+begin
+    declare cont int default 0;
+	declare msg varchar(500);
+            repita: loop
+				set cont = cont + 1;
+				if cont > (select max(idTurma) from turmas) then
+					leave repita;
+				end if;
+                if cont = id then
+					update turmas set turmas.nomeTurma = nome where turmas.idTurma = cont;
+					update turmas set turmas.idEscola = idE where turmas.idTurma = cont;
+					set msg = 'Turma atualizada com sucesso!';
+				end if;
+			end loop;
+SELECT msg;
+end $$
+Delimiter ;
+drop procedure procedure_alteraTurma;
+
+call procedure_alteraTurma(4, '3C', 1);
+select * from turmas;
