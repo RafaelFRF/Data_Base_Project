@@ -23,3 +23,12 @@ create view turma_aluno_materia_cidade_geral as
 	select nomeTurma, nomeAluno, nomeMateria, nomeCidade from materias inner join alunos on alunos.idAluno = materias.idAluno inner join professores on professores.idProfessor = materias.idProfessor inner join turmas on turmas.idTurma = alunos.idTurma inner join escolas on escolas.idEscola = turmas.idEscola;
 select * from turma_aluno_materia_cidade_geral;
 
+# VIEW 6 COM LEFT JOIN
+create view tudo_turma_considerando_idProfessor as
+	select turmas.idTurma, idProfessor, nomeTurma, idEscola from professores_turmas left join turmas on turmas.idTurma = professores_turmas.idTurma;
+select * from tudo_turma_considerando_idProfessor;
+
+# VIEW 7 COM RIGHT JOIN OBS >> USANDO DATE_FORMAT E CURDATE
+create view tudo_professor_considerando_idTurma as
+	select idTurma, professores.idProfessor, nomeProfessor, truncate(datediff(curdate(), nascimentoProfessor)/365.25,0) as idadeProfessor, generoProfessor from professores_turmas right join professores on professores.idProfessor = professores_turmas.idProfessor;
+select * from cidade_turma_de_minas;
