@@ -133,19 +133,20 @@ begin
 	declare msg varchar(500);
             repita: loop
 				set cont = cont + 1;
-				if cont > (select max(idTurma) from turmas) then
+				if cont > (select max(idEscola) from escolas) then
 					leave repita;
 				end if;
                 if cont = id then
-					update turmas set turmas.nomeTurma = nome where turmas.idTurma = cont;
-					update turmas set turmas.idEscola = idE where turmas.idTurma = cont;
-					set msg = 'Turma atualizada com sucesso!';
+					update escolas set escolas.nomeEscola = escola where escolas.idEscola = cont;
+					update escolas set escolas.siglaEstado = estado where escolas.idEscola = cont;
+					update escolas set escolas.nomeCidade = cidade where escolas.idEscola = cont;
+					set msg = 'Escola atualizada com sucesso!';
 				end if;
 			end loop;
 SELECT msg;
 end $$
 Delimiter ;
-drop procedure procedure_alteraTurma;
+drop procedure procedure_alteraEscola;
 
-call procedure_alteraTurma(4, '3C', 1);
-select * from turmas;
+call procedure_alteraEscola(1, 'Santo Antonio', 'MG', 'Belo Horizonte');
+select * from escolas;
