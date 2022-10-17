@@ -150,3 +150,29 @@ drop procedure procedure_alteraEscola;
 
 call procedure_alteraEscola(1, 'Santo Antonio', 'MG', 'Belo Horizonte');
 select * from escolas;
+
+
+#PROCEDURE 7 EXCLUIR ESCOLA 
+Delimiter $$
+create procedure procedure_deletaEscola(in id int)
+begin
+    declare cont int default 0;
+	declare msg varchar(500);
+            repita: loop
+				set cont = cont + 1;
+				if cont > (select max(idEscola) from escolas) then
+					leave repita;
+				end if;
+                if cont = id then
+					delete from escolas where escolas.idEscola = cont;
+					set msg = 'Escola deletada com sucesso!';
+				end if;
+			end loop;
+SELECT msg;
+end $$
+Delimiter ;
+drop procedure procedure_deletaEscola;
+
+call procedure_deletaEscola(1);
+select * from escolas;
+
